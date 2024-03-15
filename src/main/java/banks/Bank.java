@@ -10,7 +10,7 @@ public abstract class Bank implements CurrencyTrading {
     String API_URL;
     Map<Currency,CurrencyRate> rates;
 
-    public CurrencyRate getCurrencyRat(Currency currency) {
+    public CurrencyRate getCurrencyRate(Currency currency) {
         return null;
     }
 
