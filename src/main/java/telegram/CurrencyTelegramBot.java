@@ -2,6 +2,7 @@ package telegram;
 
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import telegram.comand.StartCommand;
 
 import java.io.IOException;
 import java.util.Map;
