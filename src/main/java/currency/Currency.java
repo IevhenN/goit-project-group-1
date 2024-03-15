@@ -1,2 +1,7 @@
-package currency;public enum Currency {
+package currency;
+
+public enum Currency {
+    USD,
+    EUR,
+    UAH
 }
