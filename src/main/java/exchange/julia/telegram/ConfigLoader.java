@@ -1,4 +1,4 @@
-package exchange_Julia;
+package exchange.julia.telegram;
 
 import com.google.gson.Gson;
 

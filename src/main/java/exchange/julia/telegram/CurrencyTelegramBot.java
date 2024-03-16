@@ -1,8 +1,8 @@
-package exchange_Julia;
+package exchange.julia.telegram;
 
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import exchange_Julia.comand.StartCommand;
+import exchange.julia.telegram.comand.StartCommand;
 
 import java.io.IOException;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package exchange_Julia;
+package exchange.julia.telegram;
 
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
