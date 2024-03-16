@@ -9,6 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.bots.AbsSender;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -19,13 +20,14 @@ public class StartCommand extends BotCommand {
     }
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] strings) {
-        String text = "Congratulations! This bot will help you track the current exchange rate";
+//        String text = "Congratulations! This bot will help you track the current exchange rate";
+        String text = "Щиро вітаю! Цей бот допоможе відстежити поточний курс валют";
         SendMessage message = new SendMessage();
         message.setText(text);
         message.setChatId(Long.toString(chat.getId()));
         InlineKeyboardButton infoButton = InlineKeyboardButton
                 .builder()
-                .text("Get information")
+                .text("Отримати інформацію")
                 .callbackData("get_information")
                 .build();
         InlineKeyboardMarkup keyboardinform = InlineKeyboardMarkup
@@ -36,7 +38,7 @@ public class StartCommand extends BotCommand {
                 .build();
         InlineKeyboardButton settingButton = InlineKeyboardButton
                 .builder()
-                .text("Setting")
+                .text("Налаштування")
                 .callbackData("get_setting")
                 .build();
         List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
