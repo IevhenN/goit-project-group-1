@@ -1,6 +1,6 @@
-package exchange_Julia.app;
+package exchange.julia.telegram.app;
 
-import exchange_Julia.TelegramBotService;
+import exchange.julia.telegram.TelegramBotService;
 
 public class TelegramBotApp {
     public static void main(String[] args){
