@@ -1,4 +1,4 @@
-package exchange.julia.telegram;
+package telegram;
 
 import currency.Currency;
 import exchange.julia.telegram.currency.CurrencyService;
@@ -6,16 +6,14 @@ import exchange.julia.telegram.ui.PrintCurrencyService;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import exchange.julia.telegram.comand.StartCommand;
+import telegram.ConfigLoader;
+import telegram.StartCommand;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
     Map<String, Object> config;
@@ -140,11 +138,55 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
                 .text("10")
                 .callbackData("ten")
                 .build();
-        // дописати цифри 11-18
+        InlineKeyboardButton elevenButton = InlineKeyboardButton
+                .builder()
+                .text("11")
+                .callbackData("eleven")
+                .build();
+        InlineKeyboardButton twelveButton = InlineKeyboardButton
+                .builder()
+                .text("12")
+                .callbackData("twelve")
+                .build();
+        InlineKeyboardButton thirteenButton = InlineKeyboardButton
+                .builder()
+                .text("13")
+                .callbackData("thirteen")
+                .build();
+        InlineKeyboardButton fourteenButton = InlineKeyboardButton
+                .builder()
+                .text("14")
+                .callbackData("fourteen")
+                .build();
+        InlineKeyboardButton fifteenButton = InlineKeyboardButton
+                .builder()
+                .text("15")
+                .callbackData("fifteen")
+                .build();
+        InlineKeyboardButton sixteenButton = InlineKeyboardButton
+                .builder()
+                .text("16")
+                .callbackData("sixteen")
+                .build();
+        InlineKeyboardButton seventeenButton = InlineKeyboardButton
+                .builder()
+                .text("17")
+                .callbackData("seventeen")
+                .build();
+        InlineKeyboardButton eighteenButton = InlineKeyboardButton
+                .builder()
+                .text("18")
+                .callbackData("eighteen")
+                .build();
+        InlineKeyboardButton nonnotificationsButton = InlineKeyboardButton
+                .builder()
+                .text("Вимкнути сповіщення")
+                .callbackData("non_notifications")
+                .build();
         List<List<InlineKeyboardButton>> timeKeyboard = new ArrayList<>();
-        timeKeyboard.add(Collections.singletonList(nineButton));
-        timeKeyboard.add(Collections.singletonList(tenButton));
-        //дописати цифри 11-18
+        timeKeyboard.add(Arrays.asList(nineButton, tenButton, elevenButton, twelveButton, thirteenButton));
+        timeKeyboard.add(Arrays.asList(fourteenButton, fifteenButton, sixteenButton, seventeenButton, eighteenButton));
+        timeKeyboard.add(Collections.singletonList(nonnotificationsButton));
         timeMarkup = InlineKeyboardMarkup.builder().keyboard(timeKeyboard).build();
     }
     @Override
@@ -159,17 +201,7 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
         if (update.hasCallbackQuery()) {
             String callbackQuery = update.getCallbackQuery().getData();
             if (callbackQuery.equals("get_information")) {
-                double usdRate = currencyService.getRate(Currency.USD);
-                String textMessage = printCurrencyService.convert(usdRate, Currency.USD);
-                SendMessage responseMessage = new SendMessage();
-                responseMessage.setText(textMessage);
-                long chatId = update.getCallbackQuery().getMessage().getChatId();
-                responseMessage.setChatId(String.valueOf(chatId));
-                try {
-                    execute(responseMessage);
-                } catch (TelegramApiException e) {
-                    throw new RuntimeException(e);
-                }
+                System.out.println("get_information");
             } else if (callbackQuery.equals("get_setting")) {
                 SendMessage message = new SendMessage();
                 message.setText("Налаштування");

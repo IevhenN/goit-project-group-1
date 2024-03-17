@@ -1,4 +1,4 @@
-package exchange.julia.telegram.comand;
+package telegram;
 
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.BotCommand;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -20,7 +20,6 @@ public class StartCommand extends BotCommand {
     }
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] strings) {
-//        String text = "Congratulations! This bot will help you track the current exchange rate";
         String text = "Щиро вітаю! Цей бот допоможе відстежити поточний курс валют";
         SendMessage message = new SendMessage();
         message.setText(text);
