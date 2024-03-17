@@ -6,6 +6,7 @@ import exchange.julia.telegram.ui.PrintCurrencyService;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import settings.Constants;
 import telegram.ConfigLoader;
 import telegram.StartCommand;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -114,7 +115,7 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
                 .build();
         InlineKeyboardButton privatbankButton = InlineKeyboardButton
                 .builder()
-                .text("ПриватБанк")
+                .text(Constants.CHECKBOX+"ПриватБанк")
                 .callbackData("privatbank")
                 .build();
         InlineKeyboardButton monoButton = InlineKeyboardButton
