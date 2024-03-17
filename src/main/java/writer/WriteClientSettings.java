@@ -8,16 +8,16 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
-public class WriteClientSettings implements WriterData<Object> {
+public class WriteClientSettings implements WriterData {
 
     private static final String FILE_EXTENSION = ".json";
 
     @Override
-    public boolean writeData(List<ChatSettings> data, long chatId) {
-           String fileName = chatId + FILE_EXTENSION;
+    public boolean writeData(ChatSettings chatSettings) {
+        String fileName = chatSettings.getChatID() + FILE_EXTENSION;
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try (FileWriter writer = new FileWriter(fileName)) {
-            gson.toJson(data, writer);
+            gson.toJson(chatSettings, writer);
             return true;
         } catch (IOException e) {
             e.printStackTrace();
