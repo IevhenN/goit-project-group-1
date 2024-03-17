@@ -5,5 +5,6 @@ public class Constants {
     static String BOT_TOKEN;
 
     public static String CHECKBOX ="✅";
+    public static final String SETTINGS_DIRECTORY = "Data/";
 
 }

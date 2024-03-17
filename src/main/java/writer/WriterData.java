@@ -1,7 +1,10 @@
 package writer;
 
-import java.util.List;
+import chat.ChatSettings;
 
-public interface WriterData<T> {
-    boolean writeData(List<Object> responses, String fileName);
+import java.util.List;
+import java.util.Map;
+
+public interface WriterData {
+    boolean writeData(ChatSettings chatSettings);
 }
