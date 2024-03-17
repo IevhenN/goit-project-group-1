@@ -1,5 +1,6 @@
 package writer;
 
+import chat.ChatSettings;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -9,8 +10,11 @@ import java.util.List;
 
 public class WriteClientSettings implements WriterData<Object> {
 
+    private static final String FILE_EXTENSION = ".json";
+
     @Override
-    public boolean writeData(List<Object> data, String fileName) {
+    public boolean writeData(List<ChatSettings> data, long chatId) {
+           String fileName = chatId + FILE_EXTENSION;
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         try (FileWriter writer = new FileWriter(fileName)) {
             gson.toJson(data, writer);
