@@ -3,16 +3,13 @@ package banks;
 import currency.Currency;
 import currency.CurrencyRate;
 
-import java.util.List;
 import java.util.Map;
 
-public abstract class Bank implements CurrencyTrading {
+public enum Bank {
+    PRIVAT,
+    MONO,
+    NBU;
+    CurrencyTrading bank;
     String API_URL;
     Map<Currency,CurrencyRate> rates;
-
-    public CurrencyRate getCurrencyRate(Currency currency) {
-        return null;
-    }
-
-
 }
