@@ -1,11 +1,14 @@
 package telegram;
 
+import chat.ChatSettings;
+import chat.ChatsSettings;
 import currency.Currency;
 import exchange.julia.telegram.currency.CurrencyService;
 import exchange.julia.telegram.ui.PrintCurrencyService;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import reader.Reader;
 import settings.Constants;
 import telegram.ConfigLoader;
 import telegram.StartCommand;
@@ -32,8 +35,6 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
     String botUsername = (String) botConfig.get("username");
     String botToken = (String) botConfig.get("token");
 
-    private CurrencyService currencyService;
-    private PrintCurrencyService printCurrencyService;
     private final InlineKeyboardMarkup settingsMarkup;
     private final InlineKeyboardMarkup commasMarkup;
     private final InlineKeyboardMarkup bankMarkup;

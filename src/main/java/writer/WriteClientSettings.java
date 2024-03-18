@@ -6,7 +6,6 @@ import com.google.gson.GsonBuilder;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.List;
 
 import static settings.Constants.SETTINGS_DIRECTORY;
 
