@@ -6,5 +6,6 @@ public class Constants {
 
     public static String CHECKBOX ="✅";
     public static final String SETTINGS_DIRECTORY = "Data/";
+    public static final String CONFIG_FILE_NAME = "init.json";
 
 }
