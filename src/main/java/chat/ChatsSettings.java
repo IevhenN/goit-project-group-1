@@ -41,7 +41,7 @@ public class ChatsSettings {
     }
 
     public ChatSettings getChatSettings(long chatID) {
-        return chatsSettings.getOrDefault(chatID, new ChatSettings());
+        return chatsSettings.getOrDefault(chatID, new ChatSettings(chatID));
     }
 
 }
