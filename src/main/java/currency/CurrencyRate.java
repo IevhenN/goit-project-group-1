@@ -1,14 +1,18 @@
 package currency;
 
 public class CurrencyRate {
-    Currency currency;
-    double buy;
-    double sell;
+    private Currency currency;
+    private double buy;
+    private double sell;
 
-    public CurrencyRate(Currency currency, double buy, double sell) {
+  public CurrencyRate(Currency currency, double buy, double sell) {
         this.currency = currency;
         this.buy = buy;
         this.sell = sell;
+    }
+
+    public Currency getCurrency() {
+        return currency;
     }
 
     public double getBuy() {
@@ -18,7 +22,6 @@ public class CurrencyRate {
     public double getSell() {
         return sell;
     }
-
     @Override
     public String toString() {
         return "{" +
