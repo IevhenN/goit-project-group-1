@@ -5,7 +5,7 @@ public class CurrencyRate {
     private double buy;
     private double sell;
 
-    public CurrencyRate(Currency currency, double buy, double sell) {
+  public CurrencyRate(Currency currency, double buy, double sell) {
         this.currency = currency;
         this.buy = buy;
         this.sell = sell;
@@ -21,5 +21,13 @@ public class CurrencyRate {
 
     public double getSell() {
         return sell;
+    }
+    @Override
+    public String toString() {
+        return "{" +
+                "=" + currency +
+                ", buy=" + buy +
+                ", sell=" + sell +
+                '}';
     }
 }
