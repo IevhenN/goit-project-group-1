@@ -2,13 +2,15 @@ package reader;
 
 import chat.ChatSettings;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
+import static settings.Constants.CONFIG_FILE_NAME;
 import static settings.Constants.SETTINGS_DIRECTORY;
 
 public class Reader {
@@ -28,24 +30,29 @@ public class Reader {
     }
 
     public List<Long> getAllChatID() {
-        List<Long> chatIDs = new ArrayList<>();
         File directory = new File(SETTINGS_DIRECTORY);
-        if (directory.exists() && directory.isDirectory()) {
-            File[] files = directory.listFiles();
-            if (files != null) {
-                for (File file : files) {
-                    if (file.isFile()) {
-                        String fileName = file.getName();
-                        long chatID;
-                        try {
-                            chatID = Long.parseLong(fileName.substring(0, fileName.lastIndexOf('.')));
-                            chatIDs.add(chatID);
-                        } catch (NumberFormatException e) {
-                        }
-                    }
+        List<Long> chatIDs = new ArrayList<>();
+        for (File file : directory.listFiles()) {
+            if (file.isFile()) {
+                String fileName = file.getName();
+                try {
+                    long chatID = Long.parseLong(fileName.substring(0, fileName.lastIndexOf('.')));
+                    chatIDs.add(chatID);
+                } catch (NumberFormatException ignored) {
                 }
             }
         }
         return chatIDs;
+    }
+    public static Map<String, Object> readInit() {
+        String filePath = SETTINGS_DIRECTORY + CONFIG_FILE_NAME;
+        try (FileReader fileReader = new FileReader(filePath)) {
+            JsonObject jsonObject = JsonParser.parseReader(fileReader).getAsJsonObject();
+            Gson gson = new Gson();
+            return gson.fromJson(jsonObject, Map.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
