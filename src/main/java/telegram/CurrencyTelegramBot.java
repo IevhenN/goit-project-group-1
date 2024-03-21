@@ -1,17 +1,9 @@
 package telegram;
 
-import chat.ChatSettings;
-import chat.ChatsSettings;
-import currency.Currency;
-import exchange.julia.telegram.currency.CurrencyService;
-import exchange.julia.telegram.ui.PrintCurrencyService;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import reader.Reader;
 import settings.Constants;
-import telegram.ConfigLoader;
-import telegram.StartCommand;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -234,6 +226,8 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
 //        }
         if (update.hasCallbackQuery()) {
             long chatId = update.getCallbackQuery().getMessage().getChatId();
+            long messageId = update.getCallbackQuery().getMessage().getMessageId();
+
             String callbackQuery = update.getCallbackQuery().getData();
 
             if (callbackQuery.equals("get_information")) {
@@ -258,16 +252,23 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
                 } catch (TelegramApiException e) {
                     throw new RuntimeException(e);
                 }
-            } else if (callbackQuery.equals("currency")) {
-                SendMessage message = new SendMessage();
-                message.setText("Виберіть валюту");
-                message.setReplyMarkup(InlineKeyboard.getCurrencyMessage(chatId));
-                message.setChatId(String.valueOf(chatId));
-                try {
-                    execute(message);
-                } catch (TelegramApiException e) {
-                    throw new RuntimeException(e);
-                }
+            } else if (callbackQuery.contains("currency")) {
+
+//            EditMessageReplyMarkup editMarkup = new EditMessageReplyMarkup()
+//                editMarkup.setChatId(chatId);
+//                editMarkup.setMessageId(Math.toIntExact(messageId))
+//                editMarkup.setReplyMarkup(InlineKeyboard.getCurrencyKeyboard(chatId));
+
+                InlineKeyboard.sendCurrencyMassage(this,update);
+//                SendMessage message = new SendMessage();
+//                message.setText("Виберіть валюту");
+//                message.setReplyMarkup(InlineKeyboard.getCurrencyKeyboard(chatId));
+//                message.setChatId(String.valueOf(chatId));
+//                try {
+//                    execute(message);
+//                } catch (TelegramApiException e) {
+//                    throw new RuntimeException(e);
+//                }
             } else if (callbackQuery.equals("bank")) {
                 SendMessage message = new SendMessage();
                 message.setText("Виберіть банк");
