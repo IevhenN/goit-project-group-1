@@ -14,4 +14,6 @@ public enum Currency {
     public String getCode() {
         return code;
     }
+
 }
+
