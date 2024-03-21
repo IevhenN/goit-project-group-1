@@ -38,7 +38,7 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
     private final InlineKeyboardMarkup settingsMarkup;
     private final InlineKeyboardMarkup commasMarkup;
     private final InlineKeyboardMarkup bankMarkup;
-    private final InlineKeyboardMarkup currencysMarkup;
+//    private final InlineKeyboardMarkup currencysMarkup;
     private final InlineKeyboardMarkup timeMarkup;
 
 
@@ -94,20 +94,20 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
 
         commasMarkup = InlineKeyboardMarkup.builder().keyboard(commasKeyboard).build();
 
-        InlineKeyboardButton usdButton = InlineKeyboardButton
-                .builder()
-                .text("USD")
-                .callbackData("get_usd")
-                .build();
-        InlineKeyboardButton eurButton = InlineKeyboardButton
-                .builder()
-                .text("EUR")
-                .callbackData("get_eur")
-                .build();
-        List<List<InlineKeyboardButton>> currencysKeyboard = new ArrayList<>();
-        currencysKeyboard.add(Collections.singletonList(usdButton));
-        currencysKeyboard.add(Collections.singletonList(eurButton));
-        currencysMarkup = InlineKeyboardMarkup.builder().keyboard(currencysKeyboard).build();
+//        InlineKeyboardButton usdButton = InlineKeyboardButton
+//                .builder()
+//                .text("USD")
+//                .callbackData("get_usd")
+//                .build();
+//        InlineKeyboardButton eurButton = InlineKeyboardButton
+//                .builder()
+//                .text("EUR")
+//                .callbackData("get_eur")
+//                .build();
+//        List<List<InlineKeyboardButton>> currencysKeyboard = new ArrayList<>();
+//        currencysKeyboard.add(Collections.singletonList(usdButton));
+//        currencysKeyboard.add(Collections.singletonList(eurButton));
+//        currencysMarkup = InlineKeyboardMarkup.builder().keyboard(currencysKeyboard).build();
 
         InlineKeyboardButton nbuButton = InlineKeyboardButton
                 .builder()
@@ -200,15 +200,48 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
     @Override
     public void processNonCommandUpdate(Update update) {
 
+//        if (update.hasMessage() && update.getMessage().hasText()) {
+//            long chatId = update.getMessage().getChatId();
+//            String messageText = update.getMessage().getText();
+//
+//            // Отправляем сообщение с кнопками
+//            SendMessage message = new SendMessage()
+//                    .setChatId(chatId)
+//                    .setText("Нажмите кнопку для изменения")
+//                    .setReplyMarkup(getInlineKeyboardMarkup());
+//            try {
+//                execute(message);
+//            } catch (TelegramApiException e) {
+//                e.printStackTrace();
+//            }
+//        } else if (update.hasCallbackQuery()) {
+//            // Получаем данные обратного вызова (нажатой кнопки)
+//            String callbackData = update.getCallbackQuery().getData();
+//            long messageId = update.getCallbackQuery().getMessage().getMessageId();
+//            long chatId = update.getCallbackQuery().getMessage().getChatId();
+//
+//            // Изменяем кнопки в сообщении
+//            EditMessageReplyMarkup editMarkup = new EditMessageReplyMarkup()
+//                    .setChatId(chatId)
+//                    .setMessageId(Math.toIntExact(messageId))
+//                    .setReplyMarkup(getAnotherInlineKeyboardMarkup());
+//
+//            try {
+//                execute(editMarkup);
+//            } catch (TelegramApiException e) {
+//                e.printStackTrace();
+//            }
+//        }
         if (update.hasCallbackQuery()) {
+            long chatId = update.getCallbackQuery().getMessage().getChatId();
             String callbackQuery = update.getCallbackQuery().getData();
+
             if (callbackQuery.equals("get_information")) {
                 System.out.println("get_information");
             } else if (callbackQuery.equals("get_setting")) {
                 SendMessage message = new SendMessage();
                 message.setText("Налаштування");
                 message.setReplyMarkup(settingsMarkup);
-                long chatId = update.getCallbackQuery().getMessage().getChatId();
                 message.setChatId(String.valueOf(chatId));
                 try {
                     execute(message);
@@ -219,7 +252,6 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
                 SendMessage message = new SendMessage();
                 message.setText("Виберіть кількість знаків після коми");
                 message.setReplyMarkup(commasMarkup);
-                long chatId = update.getCallbackQuery().getMessage().getChatId();
                 message.setChatId(String.valueOf(chatId));
                 try {
                     execute(message);
@@ -229,8 +261,7 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
             } else if (callbackQuery.equals("currency")) {
                 SendMessage message = new SendMessage();
                 message.setText("Виберіть валюту");
-                message.setReplyMarkup(currencysMarkup);
-                long chatId = update.getCallbackQuery().getMessage().getChatId();
+                message.setReplyMarkup(InlineKeyboard.getCurrencyMessage(chatId));
                 message.setChatId(String.valueOf(chatId));
                 try {
                     execute(message);
@@ -241,7 +272,6 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
                 SendMessage message = new SendMessage();
                 message.setText("Виберіть банк");
                 message.setReplyMarkup(bankMarkup);
-                long chatId = update.getCallbackQuery().getMessage().getChatId();
                 message.setChatId(String.valueOf(chatId));
                 try {
                     execute(message);
@@ -252,7 +282,6 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
                 SendMessage message = new SendMessage();
                 message.setText("Виберіть час сповіщення");
                 message.setReplyMarkup(timeMarkup);
-                long chatId = update.getCallbackQuery().getMessage().getChatId();
                 message.setChatId(String.valueOf(chatId));
                 try {
                     execute(message);
