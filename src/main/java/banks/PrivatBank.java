@@ -1,18 +1,29 @@
-package Taras;
+package banks;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
+import currency.Currency;
+import currency.CurrencyRate;
 class PrivatBank implements CurrencyTrading {
+    private static PrivatBank instance = null;
     private static final String API_URL = "https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5";
 
+    private PrivatBank() {
+    }
+
+    public static PrivatBank getInstance() {
+        if (instance == null) {
+            instance = new PrivatBank();
+        }
+        return instance;
+    }
+
     @Override
-    public void getCurrencyRateAPI() {
+    public CurrencyRate getCurrencyRateAPI(Currency currency) {
+        CurrencyRate currencyRate = null;
         try {
             URL url = new URL(API_URL);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -28,16 +39,20 @@ class PrivatBank implements CurrencyTrading {
 
             JSONArray currencyRates = new JSONArray(response.toString());
             for (int i = 0; i < currencyRates.length(); i++) {
-                JSONObject currency = currencyRates.getJSONObject(i);
-                String currencyCode = currency.getString("ccy");
-                double rate = currency.getDouble("buy");
-                System.out.println(currencyCode + " = " + rate);
+                JSONObject currencyObj = currencyRates.getJSONObject(i);
+                String currencyCode = currencyObj.getString("ccy");
+                double buyRate = currencyObj.getDouble("buy");
+                double sellRate = currencyObj.getDouble("sale");
+                if (currencyCode.equals(currency.getCode())) {
+                    currencyRate = new CurrencyRate(currency, buyRate, sellRate);
+                    break;
+                }
             }
 
             connection.disconnect();
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return currencyRate;
     }
 }
-
