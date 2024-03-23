@@ -18,7 +18,7 @@ public class Monobank implements CurrencyTrading {
     private static Monobank instance = null;
     private static final String MONO_API_URL = "https://api.monobank.ua/bank/currency";
 
-    private static synchronized Monobank getInstance(){
+    public static synchronized Monobank getInstance(){
         if(instance == null){
             instance = new Monobank();
         }
