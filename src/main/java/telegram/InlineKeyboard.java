@@ -1,6 +1,7 @@
 package telegram;
 
 import banks.Bank;
+import banks.QuantityDigits;
 import chat.ChatSettings;
 import chat.ChatsSettings;
 import currency.Currency;
@@ -138,5 +139,63 @@ public class InlineKeyboard {
             }
         }
     }
+    public static InlineKeyboardMarkup getQuantityDigitsKeyboard(long chatID) {
+        ChatSettings chatSettings = ChatsSettings.getInstance().getChatSettings(chatID);
+
+        Stream<QuantityDigits>quantityDigitsStream = Stream.of(QuantityDigits.values());
+
+        List<List<InlineKeyboardButton>> quantityDigitsKeyboard = quantityDigitsStream
+                .map((QuantityDigits i) -> {
+                    String checkbox = "";
+                    if (chatSettings.getQuantityDigits()==i){
+                        checkbox=Constants.CHECKBOX+" ";
+                    }
+                    InlineKeyboardButton button = InlineKeyboardButton
+                            .builder()
+                            .text(checkbox+i.getName())
+                            .callbackData("quantitydigits" + i.name())
+                            .build();
+
+                    return Collections.singletonList(button);
+                })
+                .collect(Collectors.toList());
+
+        return InlineKeyboardMarkup.builder().keyboard(quantityDigitsKeyboard).build();
+    }
+    public static void sendQuantityDigitsMessage(CurrencyTelegramBot tBot, Update update){
+        long chatId = update.getCallbackQuery().getMessage().getChatId();
+        long messageId = update.getCallbackQuery().getMessage().getMessageId();
+        String callbackQuery = update.getCallbackQuery().getData();
+
+        if (callbackQuery.equals("quantitydigits")){
+            // new menu
+            SendMessage message = new SendMessage();
+            message.setText("Виберіть кількість знаків після коми");
+            message.setReplyMarkup(InlineKeyboard.getQuantityDigitsKeyboard(chatId));
+            message.setChatId(String.valueOf(chatId));
+            try {
+                tBot.execute(message);
+            } catch (TelegramApiException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            // The user clicked the button
+            String nameEnum = callbackQuery.replace("quantitydigits","");
+            QuantityDigits quantityDigits = QuantityDigits.valueOf(nameEnum);
+            ChatSettings chatSettings = ChatsSettings.getInstance().getChatSettings(chatId);
+            chatSettings.setQuantityDigits(quantityDigits);
+
+            EditMessageReplyMarkup editMarkup = new EditMessageReplyMarkup();
+            editMarkup.setChatId(chatId);
+            editMarkup.setMessageId(Math.toIntExact(messageId));
+            editMarkup.setReplyMarkup(InlineKeyboard.getQuantityDigitsKeyboard(chatId));
+            try {
+                tBot.execute(editMarkup);
+            } catch (TelegramApiException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
 
 }
