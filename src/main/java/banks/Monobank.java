@@ -12,6 +12,7 @@ import currency.Currency;
 import currency.CurrencyRate;
 
 public class Monobank implements CurrencyTrading {
+
     private Monobank(){}
 
     private static Monobank instance = null;
@@ -23,7 +24,6 @@ public class Monobank implements CurrencyTrading {
         }
         return instance;
     }
-
 
     @Override
     public CurrencyRate getCurrencyRateAPI(Currency currency) {
@@ -60,19 +60,3 @@ public class Monobank implements CurrencyTrading {
         }
         throw new IllegalStateException("Currency not found: " + currencyCode);
     }
-
-
-    public static void main(String[] args)  throws IOException {
-        CurrencyRate euroRate = Monobank.getInstance().getCurrencyRateAPI(Currency.EUR);
-        System.out.println("Currency: " + euroRate.getCurrency());
-        System.out.println("Code: " + euroRate.getCurrency().getCode());
-        System.out.println("Buy rate: " + euroRate.getBuy());
-        System.out.println("Sell rate: " + euroRate.getSell() + "\n");
-
-        CurrencyRate usdRate = Monobank.getInstance().getCurrencyRateAPI(Currency.USD);
-        System.out.println("Currency: " + usdRate.getCurrency());
-        System.out.println("Code: " + usdRate.getCurrency().getCode());
-        System.out.println("Buy rate: " + usdRate.getBuy());
-        System.out.println("Sell rate: " + usdRate.getSell());
-    }
-}
