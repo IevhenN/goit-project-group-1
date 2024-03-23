@@ -26,10 +26,7 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
     Map<String, Object> botConfig = (Map<String, Object>) telegramConfig.get("bot");
     String botUsername = (String) botConfig.get("username");
     String botToken = (String) botConfig.get("token");
-
     private final InlineKeyboardMarkup settingsMarkup;
-    private final InlineKeyboardMarkup timeMarkup;
-
 
     public CurrencyTelegramBot(){
 
@@ -52,7 +49,7 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
         InlineKeyboardButton timeButton = InlineKeyboardButton
                 .builder()
                 .text("Час оповіщення")
-                .callbackData("time")
+                .callbackData("timealerts")
                 .build();
         List<List<InlineKeyboardButton>> settingsKeyboard = new ArrayList<>();
         settingsKeyboard.add(Collections.singletonList(commasButton));
@@ -60,67 +57,6 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
         settingsKeyboard.add(Collections.singletonList(currencyButton));
         settingsKeyboard.add(Collections.singletonList(timeButton));
         settingsMarkup = InlineKeyboardMarkup.builder().keyboard(settingsKeyboard).build();
-
-        InlineKeyboardButton nineButton = InlineKeyboardButton
-                .builder()
-                .text("9")
-                .callbackData("nine")
-                .build();
-        InlineKeyboardButton tenButton = InlineKeyboardButton
-                .builder()
-                .text("10")
-                .callbackData("ten")
-                .build();
-        InlineKeyboardButton elevenButton = InlineKeyboardButton
-                .builder()
-                .text("11")
-                .callbackData("eleven")
-                .build();
-        InlineKeyboardButton twelveButton = InlineKeyboardButton
-                .builder()
-                .text("12")
-                .callbackData("twelve")
-                .build();
-        InlineKeyboardButton thirteenButton = InlineKeyboardButton
-                .builder()
-                .text("13")
-                .callbackData("thirteen")
-                .build();
-        InlineKeyboardButton fourteenButton = InlineKeyboardButton
-                .builder()
-                .text("14")
-                .callbackData("fourteen")
-                .build();
-        InlineKeyboardButton fifteenButton = InlineKeyboardButton
-                .builder()
-                .text("15")
-                .callbackData("fifteen")
-                .build();
-        InlineKeyboardButton sixteenButton = InlineKeyboardButton
-                .builder()
-                .text("16")
-                .callbackData("sixteen")
-                .build();
-        InlineKeyboardButton seventeenButton = InlineKeyboardButton
-                .builder()
-                .text("17")
-                .callbackData("seventeen")
-                .build();
-        InlineKeyboardButton eighteenButton = InlineKeyboardButton
-                .builder()
-                .text("18")
-                .callbackData("eighteen")
-                .build();
-        InlineKeyboardButton nonnotificationsButton = InlineKeyboardButton
-                .builder()
-                .text("Вимкнути сповіщення")
-                .callbackData("non_notifications")
-                .build();
-        List<List<InlineKeyboardButton>> timeKeyboard = new ArrayList<>();
-        timeKeyboard.add(Arrays.asList(nineButton, tenButton, elevenButton, twelveButton, thirteenButton));
-        timeKeyboard.add(Arrays.asList(fourteenButton, fifteenButton, sixteenButton, seventeenButton, eighteenButton));
-        timeKeyboard.add(Collections.singletonList(nonnotificationsButton));
-        timeMarkup = InlineKeyboardMarkup.builder().keyboard(timeKeyboard).build();
     }
     @Override
     public String getBotUsername() {
@@ -154,16 +90,8 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
                 InlineKeyboard.sendCurrencyMessage(this,update);
             } else if (callbackQuery.contains("bank")) {
                 InlineKeyboard.sendBankMessage(this,update);
-            } else if (callbackQuery.equals("time")) {
-                SendMessage message = new SendMessage();
-                message.setText("Виберіть час сповіщення");
-                message.setReplyMarkup(timeMarkup);
-                message.setChatId(String.valueOf(chatId));
-                try {
-                    execute(message);
-                } catch (TelegramApiException e) {
-                    throw new RuntimeException(e);
-                }
+            } else if (callbackQuery.contains("timealerts")) {
+                InlineKeyboard.sendTimeAlertsMessage(this,update);
             } else {
                 System.out.println("Non-command here");
             }

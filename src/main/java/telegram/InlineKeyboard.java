@@ -4,6 +4,7 @@ import banks.Bank;
 import banks.QuantityDigits;
 import chat.ChatSettings;
 import chat.ChatsSettings;
+import chat.TimeAlerts;
 import currency.Currency;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
@@ -196,6 +197,62 @@ public class InlineKeyboard {
             }
         }
     }
+    public static InlineKeyboardMarkup getTimeAlertsKeyboard(long chatID) {
+        ChatSettings chatSettings = ChatsSettings.getInstance().getChatSettings(chatID);
 
+        Stream<TimeAlerts>timeAlertsStream = Stream.of(TimeAlerts.values());
+
+        List<List<InlineKeyboardButton>> timeAlertsKeyboard = timeAlertsStream
+                .map((TimeAlerts i) -> {
+                    String checkbox = "";
+                    if (chatSettings.getTimeAlerts()==i){
+                        checkbox=Constants.CHECKBOX+" ";
+                    }
+                    InlineKeyboardButton button = InlineKeyboardButton
+                            .builder()
+                            .text(checkbox+i.getName())
+                            .callbackData("timealerts" + i.name())
+                            .build();
+
+                    return Collections.singletonList(button);
+                })
+                .collect(Collectors.toList());
+
+        return InlineKeyboardMarkup.builder().keyboard(timeAlertsKeyboard).build();
+    }
+    public static void sendTimeAlertsMessage(CurrencyTelegramBot tBot, Update update){
+        long chatId = update.getCallbackQuery().getMessage().getChatId();
+        long messageId = update.getCallbackQuery().getMessage().getMessageId();
+        String callbackQuery = update.getCallbackQuery().getData();
+
+        if (callbackQuery.equals("timealerts")){
+            // new menu
+            SendMessage message = new SendMessage();
+            message.setText("Виберіть час сповіщення");
+            message.setReplyMarkup(InlineKeyboard.getTimeAlertsKeyboard(chatId));
+            message.setChatId(String.valueOf(chatId));
+            try {
+                tBot.execute(message);
+            } catch (TelegramApiException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            // The user clicked the button
+            String nameEnum = callbackQuery.replace("timealerts","");
+            TimeAlerts timeAlerts = TimeAlerts.valueOf(nameEnum);
+            ChatSettings chatSettings = ChatsSettings.getInstance().getChatSettings(chatId);
+            chatSettings.setTimeAlerts(timeAlerts);
+
+            EditMessageReplyMarkup editMarkup = new EditMessageReplyMarkup();
+            editMarkup.setChatId(chatId);
+            editMarkup.setMessageId(Math.toIntExact(messageId));
+            editMarkup.setReplyMarkup(InlineKeyboard.getTimeAlertsKeyboard(chatId));
+            try {
+                tBot.execute(editMarkup);
+            } catch (TelegramApiException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 
 }
