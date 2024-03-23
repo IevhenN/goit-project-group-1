@@ -14,17 +14,14 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import settings.Constants;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class InlineKeyboard {
-    private InlineKeyboard() {
-
-    }
-
-    //    далее только статичные методы
+    private InlineKeyboard() {}
     public static InlineKeyboardMarkup getCurrencyKeyboard(long chatID) {
         ChatSettings chatSettings = ChatsSettings.getInstance().getChatSettings(chatID);
 
@@ -252,6 +249,46 @@ public class InlineKeyboard {
             } catch (TelegramApiException e) {
                 throw new RuntimeException(e);
             }
+        }
+    }
+    public static InlineKeyboardMarkup getSettingsKeyboard() {
+        InlineKeyboardButton commasButton = InlineKeyboardButton
+                .builder()
+                .text("Кількість знаків після коми")
+                .callbackData("quantitydigits")
+                .build();
+        InlineKeyboardButton bankButton = InlineKeyboardButton
+                .builder()
+                .text("Банк")
+                .callbackData("bank")
+                .build();
+        InlineKeyboardButton currencyButton = InlineKeyboardButton
+                .builder()
+                .text("Валюта")
+                .callbackData("currency")
+                .build();
+        InlineKeyboardButton timeButton = InlineKeyboardButton
+                .builder()
+                .text("Час оповіщення")
+                .callbackData("timealerts")
+                .build();
+        List<List<InlineKeyboardButton>> settingsKeyboard = new ArrayList<>();
+        settingsKeyboard.add(Collections.singletonList(commasButton));
+        settingsKeyboard.add(Collections.singletonList(bankButton));
+        settingsKeyboard.add(Collections.singletonList(currencyButton));
+        settingsKeyboard.add(Collections.singletonList(timeButton));
+        return InlineKeyboardMarkup.builder().keyboard(settingsKeyboard).build();
+    }
+    public static void sendSettingsMessage(CurrencyTelegramBot tBot, Update update){
+        long chatId = update.getCallbackQuery().getMessage().getChatId();
+        SendMessage message = new SendMessage();
+        message.setText("Налаштування");
+        message.setReplyMarkup(getSettingsKeyboard());
+        message.setChatId(String.valueOf(chatId));
+        try {
+            tBot.execute(message);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
         }
     }
 
