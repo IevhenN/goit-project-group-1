@@ -13,13 +13,14 @@ import currency.CurrencyRate;
 
 public class Monobank implements CurrencyTrading {
 
-    private Monobank(){}
+    private Monobank() {
+    }
 
     private static Monobank instance = null;
     private static final String MONO_API_URL = "https://api.monobank.ua/bank/currency";
 
-    private static synchronized Monobank getInstance(){
-        if(instance == null){
+    public static synchronized Monobank getInstance() {
+        if (instance == null) {
             instance = new Monobank();
         }
         return instance;
@@ -39,8 +40,9 @@ public class Monobank implements CurrencyTrading {
             throw new IllegalStateException("Can't connect to MONO API");
         }
 
-        Type typeToken = new TypeToken<List<Map<String, String>>>(){}.getType();
-        List<Map<String,String>> mapList = new Gson().fromJson(json, typeToken);
+        Type typeToken = new TypeToken<List<Map<String, String>>>() {
+        }.getType();
+        List<Map<String, String>> mapList = new Gson().fromJson(json, typeToken);
 
         Map<String, String> result = mapList.stream()
                 .filter(it -> it.get("currencyCodeA").equals(currency.getCode()))
@@ -49,7 +51,7 @@ public class Monobank implements CurrencyTrading {
                 .orElse(Collections.emptyMap());
 
         String currencyCode = result.get("currencyCodeA");
-        for(Currency finalCurrency: Currency.values()) {
+        for (Currency finalCurrency : Currency.values()) {
             if (currencyCode.equals(finalCurrency.getCode())) {
                 return new CurrencyRate(
                         finalCurrency
@@ -60,3 +62,4 @@ public class Monobank implements CurrencyTrading {
         }
         throw new IllegalStateException("Currency not found: " + currencyCode);
     }
+}
