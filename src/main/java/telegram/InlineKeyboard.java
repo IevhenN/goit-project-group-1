@@ -1,5 +1,6 @@
 package telegram;
 
+import banks.Bank;
 import chat.ChatSettings;
 import chat.ChatsSettings;
 import currency.Currency;
@@ -44,26 +45,9 @@ public class InlineKeyboard {
                 })
                 .collect(Collectors.toList());
 
-//        InlineKeyboardButton usdButton = InlineKeyboardButton
-//                .builder()
-//                .text("USD")
-//                .callbackData("get_usd")
-//                .build();
-//        InlineKeyboardButton eurButton = InlineKeyboardButton
-//                .builder()
-//                .text("EUR")
-//                .callbackData("get_eur")
-//                .build();
-//
-//
-//        List<List<InlineKeyboardButton>> currencysKeyboard = new ArrayList<>();
-//        currencysKeyboard.add(Collections.singletonList(usdButton));
-//        currencysKeyboard.add(Collections.singletonList(eurButton));
-
         return InlineKeyboardMarkup.builder().keyboard(currencysKeyboard).build();
     }
-
-    public static void sendCurrencyMassage(CurrencyTelegramBot tBot, Update update){
+    public static void sendCurrencyMessage(CurrencyTelegramBot tBot, Update update){
         long chatId = update.getCallbackQuery().getMessage().getChatId();
         long messageId = update.getCallbackQuery().getMessage().getMessageId();
         String callbackQuery = update.getCallbackQuery().getData();
@@ -97,4 +81,62 @@ public class InlineKeyboard {
             }
         }
     }
+    public static InlineKeyboardMarkup getBankKeyboard(long chatID) {
+        ChatSettings chatSettings = ChatsSettings.getInstance().getChatSettings(chatID);
+
+        Stream<Bank>bankStream = Stream.of(Bank.values());
+
+        List<List<InlineKeyboardButton>> bankKeyboard = bankStream
+                    .map((Bank i) -> {
+                    String checkbox = "";
+                    if (chatSettings.getBank()==i){
+                        checkbox=Constants.CHECKBOX+" ";
+                    }
+                    InlineKeyboardButton button = InlineKeyboardButton
+                            .builder()
+                            .text(checkbox+i.getName())
+                            .callbackData("bank" + i.name())
+                            .build();
+
+                    return Collections.singletonList(button);
+                })
+                .collect(Collectors.toList());
+
+        return InlineKeyboardMarkup.builder().keyboard(bankKeyboard).build();
+    }
+    public static void sendBankMessage(CurrencyTelegramBot tBot, Update update){
+        long chatId = update.getCallbackQuery().getMessage().getChatId();
+        long messageId = update.getCallbackQuery().getMessage().getMessageId();
+        String callbackQuery = update.getCallbackQuery().getData();
+
+        if (callbackQuery.equals("bank")){
+            // new menu
+            SendMessage message = new SendMessage();
+            message.setText("Виберіть банк");
+            message.setReplyMarkup(InlineKeyboard.getBankKeyboard(chatId));
+            message.setChatId(String.valueOf(chatId));
+            try {
+                tBot.execute(message);
+            } catch (TelegramApiException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            // The user clicked the button
+            String nameEnum = callbackQuery.replace("bank","");
+            Bank bank = Bank.valueOf(nameEnum);
+            ChatSettings chatSettings = ChatsSettings.getInstance().getChatSettings(chatId);
+            chatSettings.setBank(bank);
+
+            EditMessageReplyMarkup editMarkup = new EditMessageReplyMarkup();
+            editMarkup.setChatId(chatId);
+            editMarkup.setMessageId(Math.toIntExact(messageId));
+            editMarkup.setReplyMarkup(InlineKeyboard.getBankKeyboard(chatId));
+            try {
+                tBot.execute(editMarkup);
+            } catch (TelegramApiException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
 }
