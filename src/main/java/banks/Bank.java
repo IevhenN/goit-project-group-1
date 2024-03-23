@@ -1,4 +1,8 @@
 package banks;
+
+import lombok.Getter;
+
+@Getter
 public enum Bank {
     PRIVAT (PrivatBank.getInstance(),"Приват-банк"),
     MONO(Monobank.getInstance(),"Монобанк"),
@@ -12,11 +16,4 @@ public enum Bank {
         this.name = name;
     }
 
-    public CurrencyTrading getBank() {
-        return bank;
-    }
-
-    public String getName() {
-        return name;
-    }
 }
