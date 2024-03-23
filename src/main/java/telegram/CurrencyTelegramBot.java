@@ -28,7 +28,6 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
     String botToken = (String) botConfig.get("token");
 
     private final InlineKeyboardMarkup settingsMarkup;
-    private final InlineKeyboardMarkup commasMarkup;
     private final InlineKeyboardMarkup timeMarkup;
 
 
@@ -38,7 +37,7 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
         InlineKeyboardButton commasButton = InlineKeyboardButton
                 .builder()
                 .text("Кількість знаків після коми")
-                .callbackData("commas")
+                .callbackData("quantitydigits")
                 .build();
         InlineKeyboardButton bankButton = InlineKeyboardButton
                 .builder()
@@ -61,28 +60,6 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
         settingsKeyboard.add(Collections.singletonList(currencyButton));
         settingsKeyboard.add(Collections.singletonList(timeButton));
         settingsMarkup = InlineKeyboardMarkup.builder().keyboard(settingsKeyboard).build();
-
-        InlineKeyboardButton twoButton = InlineKeyboardButton
-                .builder()
-                .text("2")
-                .callbackData("two")
-                .build();
-        InlineKeyboardButton threeButton = InlineKeyboardButton
-                .builder()
-                .text("3")
-                .callbackData("three")
-                .build();
-        InlineKeyboardButton fourButton = InlineKeyboardButton
-                .builder()
-                .text("4")
-                .callbackData("four")
-                .build();
-        List<List<InlineKeyboardButton>> commasKeyboard = new ArrayList<>();
-        commasKeyboard.add(Collections.singletonList(twoButton));
-        commasKeyboard.add(Collections.singletonList(threeButton));
-        commasKeyboard.add(Collections.singletonList(fourButton));
-
-        commasMarkup = InlineKeyboardMarkup.builder().keyboard(commasKeyboard).build();
 
         InlineKeyboardButton nineButton = InlineKeyboardButton
                 .builder()
@@ -171,16 +148,8 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
                 } catch (TelegramApiException e) {
                     throw new RuntimeException(e);
                 }
-            } else if (callbackQuery.equals("commas")) {
-                SendMessage message = new SendMessage();
-                message.setText("Виберіть кількість знаків після коми");
-                message.setReplyMarkup(commasMarkup);
-                message.setChatId(String.valueOf(chatId));
-                try {
-                    execute(message);
-                } catch (TelegramApiException e) {
-                    throw new RuntimeException(e);
-                }
+            } else if (callbackQuery.contains("quantitydigits")) {
+                InlineKeyboard.sendQuantityDigitsMessage(this,update);
             } else if (callbackQuery.contains("currency")) {
                 InlineKeyboard.sendCurrencyMessage(this,update);
             } else if (callbackQuery.contains("bank")) {
