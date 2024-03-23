@@ -13,7 +13,17 @@ import currency.CurrencyRate;
 
 public class Monobank implements CurrencyTrading {
 
+    private Monobank(){}
+
+    private static Monobank instance = null;
     private static final String MONO_API_URL = "https://api.monobank.ua/bank/currency";
+
+    private static synchronized Monobank getInstance(){
+        if(instance == null){
+            instance = new Monobank();
+        }
+        return instance;
+    }
 
     @Override
     public CurrencyRate getCurrencyRateAPI(Currency currency) {
@@ -50,14 +60,3 @@ public class Monobank implements CurrencyTrading {
         }
         throw new IllegalStateException("Currency not found: " + currencyCode);
     }
-
-
-    public static void main(String[] args)  throws IOException {
-        Monobank monobank = new Monobank();
-        CurrencyRate currencyRate = monobank.getCurrencyRateAPI(Currency.EUR);
-        System.out.println("Currency: " + currencyRate.getCurrency());
-        System.out.println("Code: " + currencyRate.getCurrency().getCode());
-        System.out.println("Buy rate: " + currencyRate.getBuy());
-        System.out.println("Sell rate: " + currencyRate.getSell());
-    }
-}
