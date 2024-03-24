@@ -47,7 +47,7 @@ public class InlineKeyboard {
 
         return InlineKeyboardMarkup.builder().keyboard(currencysKeyboard).build();
     }
-    public static void sendCurrencyMessage(CurrencyTelegramBot tBot, Update update){
+    public static void sendCurrencyMessage(Update update){
         long chatId = update.getCallbackQuery().getMessage().getChatId();
         long messageId = update.getCallbackQuery().getMessage().getMessageId();
         String callbackQuery = update.getCallbackQuery().getData();
@@ -59,7 +59,7 @@ public class InlineKeyboard {
             message.setReplyMarkup(InlineKeyboard.getCurrencyKeyboard(chatId));
             message.setChatId(String.valueOf(chatId));
             try {
-                tBot.execute(message);
+                CurrencyTelegramBot.getInstance().execute(message);
             } catch (TelegramApiException e) {
                 throw new RuntimeException(e);
             }
@@ -75,7 +75,7 @@ public class InlineKeyboard {
                 editMarkup.setMessageId(Math.toIntExact(messageId));
                 editMarkup.setReplyMarkup(InlineKeyboard.getCurrencyKeyboard(chatId));
             try {
-                tBot.execute(editMarkup);
+                CurrencyTelegramBot.getInstance().execute(editMarkup);
             } catch (TelegramApiException e) {
                 throw new RuntimeException(e);
             }
@@ -104,7 +104,7 @@ public class InlineKeyboard {
 
         return InlineKeyboardMarkup.builder().keyboard(bankKeyboard).build();
     }
-    public static void sendBankMessage(CurrencyTelegramBot tBot, Update update){
+    public static void sendBankMessage(Update update){
         long chatId = update.getCallbackQuery().getMessage().getChatId();
         long messageId = update.getCallbackQuery().getMessage().getMessageId();
         String callbackQuery = update.getCallbackQuery().getData();
@@ -116,7 +116,7 @@ public class InlineKeyboard {
             message.setReplyMarkup(InlineKeyboard.getBankKeyboard(chatId));
             message.setChatId(String.valueOf(chatId));
             try {
-                tBot.execute(message);
+                CurrencyTelegramBot.getInstance().execute(message);
             } catch (TelegramApiException e) {
                 throw new RuntimeException(e);
             }
@@ -132,7 +132,7 @@ public class InlineKeyboard {
             editMarkup.setMessageId(Math.toIntExact(messageId));
             editMarkup.setReplyMarkup(InlineKeyboard.getBankKeyboard(chatId));
             try {
-                tBot.execute(editMarkup);
+                CurrencyTelegramBot.getInstance().execute(editMarkup);
             } catch (TelegramApiException e) {
                 throw new RuntimeException(e);
             }
@@ -161,7 +161,7 @@ public class InlineKeyboard {
 
         return InlineKeyboardMarkup.builder().keyboard(quantityDigitsKeyboard).build();
     }
-    public static void sendQuantityDigitsMessage(CurrencyTelegramBot tBot, Update update){
+    public static void sendQuantityDigitsMessage(Update update){
         long chatId = update.getCallbackQuery().getMessage().getChatId();
         long messageId = update.getCallbackQuery().getMessage().getMessageId();
         String callbackQuery = update.getCallbackQuery().getData();
@@ -173,7 +173,7 @@ public class InlineKeyboard {
             message.setReplyMarkup(InlineKeyboard.getQuantityDigitsKeyboard(chatId));
             message.setChatId(String.valueOf(chatId));
             try {
-                tBot.execute(message);
+                CurrencyTelegramBot.getInstance().execute(message);
             } catch (TelegramApiException e) {
                 throw new RuntimeException(e);
             }
@@ -189,7 +189,7 @@ public class InlineKeyboard {
             editMarkup.setMessageId(Math.toIntExact(messageId));
             editMarkup.setReplyMarkup(InlineKeyboard.getQuantityDigitsKeyboard(chatId));
             try {
-                tBot.execute(editMarkup);
+                CurrencyTelegramBot.getInstance().execute(editMarkup);
             } catch (TelegramApiException e) {
                 throw new RuntimeException(e);
             }
@@ -237,7 +237,7 @@ public class InlineKeyboard {
         return listOfLists;
     }
 
-    public static void sendTimeAlertsMessage(CurrencyTelegramBot tBot, Update update){
+    public static void sendTimeAlertsMessage(Update update){
         long chatId = update.getCallbackQuery().getMessage().getChatId();
         long messageId = update.getCallbackQuery().getMessage().getMessageId();
         String callbackQuery = update.getCallbackQuery().getData();
@@ -249,7 +249,7 @@ public class InlineKeyboard {
             message.setReplyMarkup(InlineKeyboard.getTimeAlertsKeyboard(chatId));
             message.setChatId(String.valueOf(chatId));
             try {
-                tBot.execute(message);
+                CurrencyTelegramBot.getInstance().execute(message);
             } catch (TelegramApiException e) {
                 throw new RuntimeException(e);
             }
@@ -265,7 +265,7 @@ public class InlineKeyboard {
             editMarkup.setMessageId(Math.toIntExact(messageId));
             editMarkup.setReplyMarkup(InlineKeyboard.getTimeAlertsKeyboard(chatId));
             try {
-                tBot.execute(editMarkup);
+                CurrencyTelegramBot.getInstance().execute(editMarkup);
             } catch (TelegramApiException e) {
                 throw new RuntimeException(e);
             }
@@ -299,28 +299,27 @@ public class InlineKeyboard {
         settingsKeyboard.add(Collections.singletonList(timeButton));
         return InlineKeyboardMarkup.builder().keyboard(settingsKeyboard).build();
     }
-    public static void sendSettingsMessage(CurrencyTelegramBot tBot, Update update){
+    public static void sendSettingsMessage(Update update){
         long chatId = update.getCallbackQuery().getMessage().getChatId();
         SendMessage message = new SendMessage();
         message.setText("Налаштування");
         message.setReplyMarkup(getSettingsKeyboard());
         message.setChatId(String.valueOf(chatId));
         try {
-            tBot.execute(message);
+            CurrencyTelegramBot.getInstance().execute(message);
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static void sendInformation(CurrencyTelegramBot tBot, Update update){
-        long chatId = update.getCallbackQuery().getMessage().getChatId();
+    public static void sendInformation(long chatId){
         SendMessage message = new SendMessage();
         String info = CurrencyTelegramBot.getInfo(chatId);
         message.setText(info);
         message.setChatId(String.valueOf(chatId));
         message.setReplyMarkup(InlineKeyboard.getStartKeyboard());
         try {
-            tBot.execute(message);
+            CurrencyTelegramBot.getInstance().execute(message);
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }
