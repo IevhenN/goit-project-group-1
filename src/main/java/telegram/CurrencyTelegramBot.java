@@ -1,5 +1,12 @@
 package telegram;
 
+
+import banks.Bank;
+import chat.ChatSettings;
+import chat.ChatsSettings;
+import currency.Currency;
+import exchange.julia.telegram.currency.CurrencyService;
+import exchange.julia.telegram.ui.PrintCurrencyService;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -61,5 +68,9 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
     @Override
     public String getBotToken() {
         return botToken;
+    }
+    public void sendMessage(long chatID, String message) {
+        // Заглушка
+        System.out.println("Відправлено повідомлення у чат " + chatID + ": " + message);
     }
 }
