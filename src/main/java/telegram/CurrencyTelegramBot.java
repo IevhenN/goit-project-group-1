@@ -12,6 +12,7 @@ import exchange.julia.telegram.ui.PrintCurrencyService;
 
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import reader.Reader;
 import settings.Constants;
 
 import java.io.IOException;
@@ -20,20 +21,8 @@ import java.util.stream.Collectors;
 
 public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
     private static CurrencyTelegramBot instance = null;
-    Map<String, Object> config;
+    Map<String, Object> initFile = Reader.readInit();
 
-    {
-        try {
-            config = ConfigLoader.loadConfig();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private final Map<String, Object> telegramConfig = (Map<String, Object>) config.get("telegram");
-    private final Map<String, Object> botConfig = (Map<String, Object>) telegramConfig.get("bot");
-    private final String botUsername = (String) botConfig.get("username");
-    private final String botToken = (String) botConfig.get("token");
 
     private CurrencyTelegramBot(){
         register(new StartCommand());
@@ -47,11 +36,12 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
     }
     @Override
     public String getBotUsername() {
-        return botUsername;
+
+        return (String) initFile.get("bot-name");
     }
     @Override
     public String getBotToken() {
-        return botToken;
+        return (String) initFile.get("bot-token");
     }
     @Override
     public void processNonCommandUpdate(Update update) {
