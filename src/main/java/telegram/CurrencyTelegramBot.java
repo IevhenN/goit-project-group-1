@@ -5,6 +5,10 @@ import chat.ChatSettings;
 import chat.ChatsSettings;
 import currency.Currency;
 import currency.CurrencyRate;
+
+import exchange.julia.telegram.currency.CurrencyService;
+import exchange.julia.telegram.ui.PrintCurrencyService;
+
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import settings.Constants;
@@ -84,5 +88,9 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
 
         return result;
 
+    }
+    public void sendMessage(long chatID, String message) {
+        // Заглушка
+        System.out.println("Відправлено повідомлення у чат " + chatID + ": " + message);
     }
 }
