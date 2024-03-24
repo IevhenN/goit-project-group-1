@@ -23,7 +23,7 @@ public class PrivatBank implements CurrencyTrading {
 
     @Override
     public CurrencyRate getCurrencyRateAPI(Currency currency) {
-        CurrencyRate currencyRate = null;
+        CurrencyRate currencyRate = new CurrencyRate(currency,0,0);
         try {
             URL url = new URL(API_URL);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -43,7 +43,7 @@ public class PrivatBank implements CurrencyTrading {
                 String currencyCode = currencyObj.getString("ccy");
                 double buyRate = currencyObj.getDouble("buy");
                 double sellRate = currencyObj.getDouble("sale");
-                if (currencyCode.equals(currency.getCode())) {
+                if (currencyCode.equals(currency.name())) {
                     currencyRate = new CurrencyRate(currency, buyRate, sellRate);
                     break;
                 }
@@ -55,4 +55,5 @@ public class PrivatBank implements CurrencyTrading {
         }
         return currencyRate;
     }
+
 }
