@@ -292,4 +292,17 @@ public class InlineKeyboard {
         }
     }
 
+    public static void sendInformation(CurrencyTelegramBot tBot, Update update){
+        long chatId = update.getCallbackQuery().getMessage().getChatId();
+        SendMessage message = new SendMessage();
+        String info = CurrencyTelegramBot.getInfo(chatId);
+        message.setText(info);
+//        message.setReplyMarkup(getSettingsKeyboard());
+        message.setChatId(String.valueOf(chatId));
+        try {
+            tBot.execute(message);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
