@@ -15,6 +15,13 @@ import static settings.Constants.SETTINGS_DIRECTORY;
 
 public class Reader {
     public ChatSettings readData(long chatID) {
+        File directory = new File(SETTINGS_DIRECTORY);
+        if (!directory.exists()) {
+            boolean success = directory.mkdirs();
+            if (!success) {
+                System.err.println("Не вдалося створити директорію " + directory.getPath());
+            }
+        }
         String fileName = SETTINGS_DIRECTORY  + chatID + ".json";
         File file = new File(fileName);
         if (!file.exists()) {
@@ -31,6 +38,12 @@ public class Reader {
 
     public List<Long> getAllChatID() {
         File directory = new File(SETTINGS_DIRECTORY);
+        if (!directory.exists()) {
+            boolean success = directory.mkdirs();
+            if (!success) {
+                System.err.println("Не вдалося створити директорію " + directory.getPath());
+            }
+        }
         List<Long> chatIDs = new ArrayList<>();
         for (File file : directory.listFiles()) {
             if (file.isFile()) {
@@ -45,6 +58,13 @@ public class Reader {
         return chatIDs;
     }
     public static Map<String, Object> readInit() {
+        File directory = new File(SETTINGS_DIRECTORY);
+        if (!directory.exists()) {
+            boolean success = directory.mkdirs();
+            if (!success) {
+                System.err.println("Не вдалося створити директорію " + directory.getPath());
+            }
+        }
         String filePath = SETTINGS_DIRECTORY + CONFIG_FILE_NAME;
         try (FileReader fileReader = new FileReader(filePath)) {
             JsonObject jsonObject = JsonParser.parseReader(fileReader).getAsJsonObject();
