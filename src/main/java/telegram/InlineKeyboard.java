@@ -15,6 +15,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import settings.Constants;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -199,24 +200,43 @@ public class InlineKeyboard {
 
         Stream<TimeAlerts>timeAlertsStream = Stream.of(TimeAlerts.values());
 
-        List<List<InlineKeyboardButton>> timeAlertsKeyboard = timeAlertsStream
+        List<InlineKeyboardButton> timeAlertsKeyboard = timeAlertsStream
                 .map((TimeAlerts i) -> {
                     String checkbox = "";
                     if (chatSettings.getTimeAlerts()==i){
                         checkbox=Constants.CHECKBOX+" ";
                     }
-                    InlineKeyboardButton button = InlineKeyboardButton
+                    return InlineKeyboardButton
                             .builder()
                             .text(checkbox+i.getName())
                             .callbackData("timealerts" + i.name())
                             .build();
-
-                    return Collections.singletonList(button);
                 })
                 .collect(Collectors.toList());
 
-        return InlineKeyboardMarkup.builder().keyboard(timeAlertsKeyboard).build();
+
+        return InlineKeyboardMarkup.builder().keyboard(getMultiList(timeAlertsKeyboard)).build();
     }
+
+    private static List<List<InlineKeyboardButton>> getMultiList(List<InlineKeyboardButton> timeAlertsKeyboard) {
+        List<List<InlineKeyboardButton>> listOfLists = new ArrayList<>();
+        List<InlineKeyboardButton> tempList = new ArrayList<>();
+        int count = 0;
+        for (InlineKeyboardButton element : timeAlertsKeyboard) {
+            tempList.add(element);
+            count++;
+            if (count % 3 == 0) {
+                listOfLists.add(new ArrayList<>(tempList));
+                tempList.clear();
+            }
+        }
+        if (!tempList.isEmpty()) {
+            listOfLists.add(new ArrayList<>(tempList));
+        }
+
+        return listOfLists;
+    }
+
     public static void sendTimeAlertsMessage(CurrencyTelegramBot tBot, Update update){
         long chatId = update.getCallbackQuery().getMessage().getChatId();
         long messageId = update.getCallbackQuery().getMessage().getMessageId();
