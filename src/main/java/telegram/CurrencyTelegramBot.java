@@ -1,5 +1,6 @@
 package telegram;
 
+import banks.Bank;
 import chat.ChatSettings;
 import chat.ChatsSettings;
 import currency.Currency;
@@ -298,5 +299,9 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
     public String getBotToken() {
 
         return botToken;
+    }
+    public void sendMessage(long chatID, String message) {
+        // Заглушка
+        System.out.println("Відправлено повідомлення у чат " + chatID + ": " + message);
     }
 }
