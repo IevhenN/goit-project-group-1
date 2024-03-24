@@ -7,7 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import currency.Currency;
 import currency.CurrencyRate;
-class PrivatBank implements CurrencyTrading {
+public class PrivatBank implements CurrencyTrading {
     private static PrivatBank instance = null;
     private static final String API_URL = "https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5";
 

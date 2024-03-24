@@ -89,8 +89,4 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
         return result;
 
     }
-    public void sendMessage(long chatID, String message) {
-        // Заглушка
-        System.out.println("Відправлено повідомлення у чат " + chatID + ": " + message);
-    }
 }
