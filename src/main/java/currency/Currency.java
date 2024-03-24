@@ -5,7 +5,7 @@ public enum Currency {
     EUR ("978"),
     UAH ("980");
 
-    private String code;
+    private final String code;
 
     Currency(String code) {
         this.code = code;
@@ -13,6 +13,10 @@ public enum Currency {
 
     public String getCode() {
         return code;
+    }
+
+    public String getName(){
+        return this.name();
     }
 
 }

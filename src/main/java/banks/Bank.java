@@ -1,15 +1,19 @@
 package banks;
 
-import currency.Currency;
-import currency.CurrencyRate;
+import lombok.Getter;
 
-import java.util.Map;
-
+@Getter
 public enum Bank {
-    PRIVAT,
-    MONO,
-    NBU;
-    CurrencyTrading bank;
-    String API_URL;
-    Map<Currency,CurrencyRate> rates;
+    PRIVAT (PrivatBank.getInstance(),"Приват-банк"),
+    MONO(Monobank.getInstance(),"Монобанк"),
+    NBU (null,"НБУ");
+
+    private final CurrencyTrading bank;
+    private final String name;
+
+    Bank(CurrencyTrading bank, String name) {
+        this.bank = bank;
+        this.name = name;
+    }
+
 }

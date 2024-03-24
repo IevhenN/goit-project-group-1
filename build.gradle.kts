@@ -39,6 +39,10 @@ dependencies {
 // https://mvnrepository.com/artifact/org.telegram/telegrambotsextensions
     implementation("org.telegram:telegrambotsextensions:6.9.7.1")
 
+// https://mvnrepository.com/artifact/org.json/json
+    implementation("org.json:json:20240303")
+
+
 }
 
 tasks.test {
