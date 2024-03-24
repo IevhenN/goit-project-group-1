@@ -162,5 +162,4 @@ README.html
 *.iml
 .idea
 .exercism
-config.json
 init.json
