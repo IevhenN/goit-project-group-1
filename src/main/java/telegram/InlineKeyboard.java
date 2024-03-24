@@ -297,12 +297,32 @@ public class InlineKeyboard {
         SendMessage message = new SendMessage();
         String info = CurrencyTelegramBot.getInfo(chatId);
         message.setText(info);
-//        message.setReplyMarkup(getSettingsKeyboard());
         message.setChatId(String.valueOf(chatId));
+        message.setReplyMarkup(InlineKeyboard.getStartKeyboard());
         try {
             tBot.execute(message);
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }
     }
+
+    public static InlineKeyboardMarkup getStartKeyboard() {
+        InlineKeyboardButton infoButton = InlineKeyboardButton
+                .builder()
+                .text("Отримати інформацію")
+                .callbackData("get_information")
+                .build();
+
+        InlineKeyboardButton settingButton = InlineKeyboardButton
+                .builder()
+                .text("Налаштування")
+                .callbackData("get_setting")
+                .build();
+        List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
+        keyboard.add(Collections.singletonList(infoButton));
+        keyboard.add(Collections.singletonList(settingButton));
+
+        return InlineKeyboardMarkup.builder().keyboard(keyboard).build();
+    }
+
 }

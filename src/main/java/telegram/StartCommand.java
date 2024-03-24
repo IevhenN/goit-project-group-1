@@ -24,29 +24,8 @@ public class StartCommand extends BotCommand {
         SendMessage message = new SendMessage();
         message.setText(text);
         message.setChatId(Long.toString(chat.getId()));
-        InlineKeyboardButton infoButton = InlineKeyboardButton
-                .builder()
-                .text("Отримати інформацію")
-                .callbackData("get_information")
-                .build();
-        InlineKeyboardMarkup keyboardinform = InlineKeyboardMarkup
-                .builder()
-                .keyboard(Collections.singleton(
-                        Collections.singletonList(infoButton)
-                ))
-                .build();
-        InlineKeyboardButton settingButton = InlineKeyboardButton
-                .builder()
-                .text("Налаштування")
-                .callbackData("get_setting")
-                .build();
-        List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
-        keyboard.add(Collections.singletonList(infoButton));
-        keyboard.add(Collections.singletonList(settingButton));
 
-        InlineKeyboardMarkup replyMarkup = InlineKeyboardMarkup.builder().keyboard(keyboard).build();
-
-        message.setReplyMarkup(replyMarkup);
+        message.setReplyMarkup(InlineKeyboard.getStartKeyboard());
         try{
             absSender.execute(message);
         } catch (TelegramApiException e){
