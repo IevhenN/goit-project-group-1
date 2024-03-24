@@ -60,6 +60,6 @@ public class Monobank implements CurrencyTrading {
                 );
             }
         }
-        throw new IllegalStateException("Currency not found: " + currencyCode);
+        return new CurrencyRate(currency,0,0);
     }
 }
