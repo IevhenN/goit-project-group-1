@@ -5,6 +5,6 @@ import currency.CurrencyRate;
 import java.util.List;
 
 public interface CurrencyTrading {
-    CurrencyRate getCurrencyRateAPI(Currency currency);
+   public CurrencyRate getCurrencyRateAPI(Currency currency);
 
 }
