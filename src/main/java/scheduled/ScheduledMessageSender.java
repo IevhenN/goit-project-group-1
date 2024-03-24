@@ -4,21 +4,21 @@ package scheduled;
 import chat.ChatSettings;
 import telegram.CurrencyTelegramBot;
 import reader.Reader;
+import telegram.InlineKeyboard;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 
 public class ScheduledMessageSender {
-
-
     private final ScheduledExecutorService scheduler;
 
-    public ScheduledMessageSender(ScheduledExecutorService scheduler) {
-        this.scheduler = scheduler;
+    public ScheduledMessageSender() {
+        this.scheduler = Executors.newScheduledThreadPool(1);
 
     }
     public void startScheduling() {
@@ -31,7 +31,7 @@ public class ScheduledMessageSender {
                 if (chatSettings != null) {
                     LocalTime notificationTime = chatSettings.getTimeAlerts().getLocalTime();
                     if (currentDateTime.toLocalTime().equals(notificationTime)) {
-                        CurrencyTelegramBot.getInfo(chatID);
+                        InlineKeyboard.sendInformation(chatID);
                     }
                 }
             }
@@ -47,5 +47,7 @@ public class ScheduledMessageSender {
 //        }
 //        return notificationDateTime;
 //    }
+
+
 }
 

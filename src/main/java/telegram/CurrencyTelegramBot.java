@@ -1,6 +1,7 @@
 package telegram;
 
 import banks.Bank;
+import banks.Monobank;
 import chat.ChatSettings;
 import chat.ChatsSettings;
 import currency.Currency;
@@ -18,6 +19,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
+    private static CurrencyTelegramBot instance = null;
     Map<String, Object> config;
 
     {
@@ -33,8 +35,15 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
     private final String botUsername = (String) botConfig.get("username");
     private final String botToken = (String) botConfig.get("token");
 
-    public CurrencyTelegramBot(){
+    private CurrencyTelegramBot(){
         register(new StartCommand());
+    }
+
+    public static synchronized CurrencyTelegramBot getInstance() {
+        if (instance == null) {
+            instance = new CurrencyTelegramBot();
+        }
+        return instance;
     }
     @Override
     public String getBotUsername() {
@@ -50,17 +59,18 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
             String callbackQuery = update.getCallbackQuery().getData();
 
             if (callbackQuery.equals("get_information")) {
-                InlineKeyboard.sendInformation(this,update);
+                long chatId = update.getCallbackQuery().getMessage().getChatId();
+                InlineKeyboard.sendInformation(chatId);
             } else if (callbackQuery.equals("get_setting")) {
-                InlineKeyboard.sendSettingsMessage(this, update);
+                InlineKeyboard.sendSettingsMessage(update);
             } else if (callbackQuery.contains("quantitydigits")) {
-                InlineKeyboard.sendQuantityDigitsMessage(this,update);
+                InlineKeyboard.sendQuantityDigitsMessage(update);
             } else if (callbackQuery.contains("currency")) {
-                InlineKeyboard.sendCurrencyMessage(this,update);
+                InlineKeyboard.sendCurrencyMessage(update);
             } else if (callbackQuery.contains("bank")) {
-                InlineKeyboard.sendBankMessage(this,update);
+                InlineKeyboard.sendBankMessage(update);
             } else if (callbackQuery.contains("timealerts")) {
-                InlineKeyboard.sendTimeAlertsMessage(this,update);
+                InlineKeyboard.sendTimeAlertsMessage(update);
             } else {
                 System.out.println("Non-command here");
             }
