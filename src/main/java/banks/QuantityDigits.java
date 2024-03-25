@@ -4,9 +4,9 @@ import lombok.Getter;
 
 @Getter
 public enum QuantityDigits {
-    TWO ("two",2),
-    THREE("three",3),
-    FOUR("four",4);
+    TWO ("два",2),
+    THREE("три",3),
+    FOUR("чотири",4);
 
     private final String name;
     private final int item;

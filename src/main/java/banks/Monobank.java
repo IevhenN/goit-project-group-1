@@ -10,14 +10,16 @@ import java.util.List;
 import java.util.Map;
 import currency.Currency;
 import currency.CurrencyRate;
+import telegram.CurrencyTelegramBot;
 
 public class Monobank implements CurrencyTrading {
 
     private Monobank() {
     }
+    CurrencyTelegramBot bot = CurrencyTelegramBot.getInstance();
+    Map<String, Object> initFile = bot.getInitFile();
 
     private static Monobank instance = null;
-    private static final String MONO_API_URL = "https://api.monobank.ua/bank/currency";
 
     public static synchronized Monobank getInstance() {
         if (instance == null) {
@@ -30,7 +32,7 @@ public class Monobank implements CurrencyTrading {
     public CurrencyRate getCurrencyRateAPI(Currency currency) {
         String json;
         try {
-            json = Jsoup.connect(MONO_API_URL)
+            json = Jsoup.connect((String) initFile.get("MONO_API_URL"))
                     .ignoreContentType(true)
                     .get()
                     .body()

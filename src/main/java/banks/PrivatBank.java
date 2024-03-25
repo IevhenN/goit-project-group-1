@@ -3,14 +3,18 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Map;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import currency.Currency;
 import currency.CurrencyRate;
+import telegram.CurrencyTelegramBot;
+
 public class PrivatBank implements CurrencyTrading {
     private static PrivatBank instance = null;
-    private static final String API_URL = "https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5";
-
+    CurrencyTelegramBot bot = CurrencyTelegramBot.getInstance();
+    Map<String, Object> initFile = bot.getInitFile();
     private PrivatBank() {
     }
 
@@ -25,7 +29,7 @@ public class PrivatBank implements CurrencyTrading {
     public CurrencyRate getCurrencyRateAPI(Currency currency) {
         CurrencyRate currencyRate = new CurrencyRate(currency,0,0);
         try {
-            URL url = new URL(API_URL);
+            URL url = new URL((String) initFile.get("PRIVAT_API_URL"));
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
 
@@ -48,7 +52,6 @@ public class PrivatBank implements CurrencyTrading {
                     break;
                 }
             }
-
             connection.disconnect();
         } catch (Exception e) {
             e.printStackTrace();
