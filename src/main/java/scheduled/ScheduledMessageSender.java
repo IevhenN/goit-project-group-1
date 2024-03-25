@@ -14,13 +14,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-
 public class ScheduledMessageSender {
     private final ScheduledExecutorService scheduler;
 
     public ScheduledMessageSender() {
         this.scheduler = Executors.newScheduledThreadPool(1);
-
     }
 
     private static void processingChatsSettings() {
@@ -37,7 +35,7 @@ public class ScheduledMessageSender {
     public void startScheduling() {
         List<Integer> hours = Arrays.stream(TimeAlerts.values())
                 .map(TimeAlerts::getItem)
-                .filter(i->i!=0)
+                .filter(i -> i != 0)
                 .toList();
 
         for (int hour : hours) {

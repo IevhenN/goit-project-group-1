@@ -5,7 +5,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 public class TelegramBotService {
-    public TelegramBotService(){
+    public TelegramBotService() {
         CurrencyTelegramBot currencyTelegramBot = CurrencyTelegramBot.getInstance();
         try {
             TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);

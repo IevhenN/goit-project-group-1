@@ -11,7 +11,6 @@ import java.io.IOException;
 import static settings.Constants.SETTINGS_DIRECTORY;
 
 public class WriteClientSettings implements WriterData {
-
     private static final String FILE_EXTENSION = ".json";
 
     @Override

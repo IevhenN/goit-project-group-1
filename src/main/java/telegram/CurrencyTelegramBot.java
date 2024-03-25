@@ -7,7 +7,6 @@ import currency.CurrencyRate;
 import lombok.Getter;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import reader.Reader;
 import settings.Constants;
 
 import java.io.IOException;
@@ -17,12 +16,9 @@ import java.util.stream.Collectors;
 @Getter
 public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
     private static CurrencyTelegramBot instance = null;
-    private final Map<String, Object> initFile = Reader.readInit();
 
     private CurrencyTelegramBot(){
-
         register(new StartCommand());
-
     }
 
     public static synchronized CurrencyTelegramBot getInstance() {
@@ -33,13 +29,11 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
     }
     @Override
     public String getBotUsername() {
-
-        return (String) initFile.get("bot-name");
+        return Constants.getInit("bot-name");
     }
     @Override
     public String getBotToken() {
-
-        return (String) initFile.get("bot-token");
+        return Constants.getInit("bot-token");
     }
     @Override
     public void processNonCommandUpdate(Update update) {

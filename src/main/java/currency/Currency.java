@@ -1,9 +1,9 @@
 package currency;
 
 public enum Currency {
-    USD ("840"),
-    EUR ("978"),
-    UAH ("980");
+    USD("840"),
+    EUR("978"),
+    UAH("980");
 
     private final String code;
 
@@ -15,7 +15,7 @@ public enum Currency {
         return code;
     }
 
-    public String getName(){
+    public String getName() {
         return this.name();
     }
 

@@ -5,10 +5,8 @@ import banks.QuantityDigits;
 import currency.Currency;
 import lombok.Getter;
 
-
 import java.util.HashSet;
 import java.util.Set;
-
 
 @Getter
 public class ChatSettings {
@@ -16,7 +14,7 @@ public class ChatSettings {
     private QuantityDigits quantityDigits = QuantityDigits.TWO;
     private Set<Currency> currencies = new HashSet<>();
     private Bank bank = Bank.PRIVAT;
-    private  TimeAlerts timeAlerts = TimeAlerts.NINE;
+    private TimeAlerts timeAlerts = TimeAlerts.NINE;
 
     public ChatSettings(long chatID) {
         this.chatID = chatID;
@@ -31,8 +29,7 @@ public class ChatSettings {
     public void setCurrencies(Currency currency) {
         if (this.currencies.contains(currency)) {
             this.currencies.remove(currency);
-        }
-        else {
+        } else {
             this.currencies.add(currency);
         }
         ChatsSettings.getInstance().addSettings(this);

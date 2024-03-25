@@ -1,20 +1,20 @@
 package banks;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import currency.Currency;
 import currency.CurrencyRate;
-import telegram.CurrencyTelegramBot;
+import settings.Constants;
 
 public class PrivatBank implements CurrencyTrading {
     private static PrivatBank instance = null;
-    CurrencyTelegramBot bot = CurrencyTelegramBot.getInstance();
-    Map<String, Object> initFile = bot.getInitFile();
+    private final String ApiUrl = Constants.getInit("PRIVAT_API_URL");
+
     private PrivatBank() {
     }
 
@@ -27,9 +27,9 @@ public class PrivatBank implements CurrencyTrading {
 
     @Override
     public CurrencyRate getCurrencyRateAPI(Currency currency) {
-        CurrencyRate currencyRate = new CurrencyRate(currency,0,0);
+        CurrencyRate currencyRate = new CurrencyRate(currency, 0, 0);
         try {
-            URL url = new URL((String) initFile.get("PRIVAT_API_URL"));
+            URL url = new URL(ApiUrl);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
 
