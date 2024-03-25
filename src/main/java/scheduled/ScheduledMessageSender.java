@@ -2,12 +2,13 @@ package scheduled;
 
 
 import chat.ChatSettings;
-import telegram.CurrencyTelegramBot;
-import reader.Reader;
+import chat.ChatsSettings;
+import chat.TimeAlerts;
 import telegram.InlineKeyboard;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -21,33 +22,35 @@ public class ScheduledMessageSender {
         this.scheduler = Executors.newScheduledThreadPool(1);
 
     }
-    public void startScheduling() {
-        Reader reader = new Reader();
-        List<Long> chatIDs = reader.getAllChatID();
-        scheduler.scheduleAtFixedRate(() -> {
-            LocalDateTime currentDateTime = LocalDateTime.now();
-            for (Long chatID : chatIDs) {
-                ChatSettings chatSettings = reader.readData(chatID);
-                if (chatSettings != null) {
-                    LocalTime notificationTime = chatSettings.getTimeAlerts().getLocalTime();
-                    if (currentDateTime.toLocalTime().equals(notificationTime)) {
-                        InlineKeyboard.sendInformation(chatID);
-                    }
-                }
+
+    private static void processingChatsSettings() {
+        System.out.println("Start shad");
+        int currentHour = LocalDateTime.now().getHour();
+        for (ChatSettings chatSettings : ChatsSettings.getInstance().getChatsSettings().values()) {
+            int notificationHour = chatSettings.getTimeAlerts().getItem();
+            if (currentHour == notificationHour) {
+                InlineKeyboard.sendInformation(chatSettings.getChatID());
             }
-        }, 0, 1, TimeUnit.HOURS);
+        }
     }
 
-//    private LocalDateTime calculateNotificationTime(ChatSettings chatSettings) {
-//        LocalTime notificationTime = chatSettings.getTimeAlerts().getLocalTime();
-//        LocalDateTime now = LocalDateTime.now();
-//        LocalDateTime notificationDateTime = LocalDateTime.of(now.toLocalDate(), notificationTime);
-//        if (now.isAfter(notificationDateTime)) {
-//            notificationDateTime = notificationDateTime.plusDays(1);
-//        }
-//        return notificationDateTime;
-//    }
+    public void startScheduling() {
+        List<Integer> hours = Arrays.stream(TimeAlerts.values())
+                .map(TimeAlerts::getItem)
+                .filter(i->i!=0)
+                .toList();
 
+        for (int hour : hours) {
+            LocalTime now = LocalTime.now();
+            int currentHour = now.getHour();
+            if (currentHour < hour) {
+                LocalTime targetTime = LocalTime.of(hour, 0);
+                long initialDelay = now.until(targetTime, TimeUnit.MILLISECONDS.toChronoUnit());
+                scheduler.scheduleAtFixedRate(ScheduledMessageSender::processingChatsSettings, initialDelay, 24 * 60 * 60 * 1000, TimeUnit.MILLISECONDS);
+                break;
+            }
+        }
+    }
 
 }
 

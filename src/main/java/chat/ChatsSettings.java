@@ -44,4 +44,7 @@ public class ChatsSettings {
         return chatsSettings.getOrDefault(chatID, new ChatSettings(chatID));
     }
 
+    public Map<Long, ChatSettings> getChatsSettings() {
+        return chatsSettings;
+    }
 }
