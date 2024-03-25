@@ -54,9 +54,8 @@ public class PrivatBank implements CurrencyTrading {
             }
             connection.disconnect();
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("Error occurred while fetching currency rate: " + e.getMessage());
         }
         return currencyRate;
     }
-
 }
