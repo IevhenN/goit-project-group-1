@@ -3,36 +3,33 @@ package banks;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.jsoup.Jsoup;
+
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
 import currency.Currency;
 import currency.CurrencyRate;
-import telegram.CurrencyTelegramBot;
+import settings.Constants;
 
 public class Monobank implements CurrencyTrading {
-
+    private static Monobank instance = null;
+    private final String ApiUrl = Constants.getInit("MONO_API_URL");
     private Monobank() {
     }
-    CurrencyTelegramBot bot = CurrencyTelegramBot.getInstance();
-    Map<String, Object> initFile = bot.getInitFile();
-
-    private static Monobank instance = null;
-
     public static synchronized Monobank getInstance() {
         if (instance == null) {
             instance = new Monobank();
         }
         return instance;
     }
-
     @Override
     public CurrencyRate getCurrencyRateAPI(Currency currency) {
         String json;
         try {
-            json = Jsoup.connect((String) initFile.get("MONO_API_URL"))
+            json = Jsoup.connect(ApiUrl)
                     .ignoreContentType(true)
                     .get()
                     .body()
@@ -62,6 +59,6 @@ public class Monobank implements CurrencyTrading {
                 );
             }
         }
-        return new CurrencyRate(currency,0,0);
+        return new CurrencyRate(currency, 0, 0);
     }
 }

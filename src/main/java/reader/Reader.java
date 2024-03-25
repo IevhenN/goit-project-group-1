@@ -22,7 +22,7 @@ public class Reader {
                 System.err.println("Не вдалося створити директорію " + directory.getPath());
             }
         }
-        String fileName = SETTINGS_DIRECTORY  + chatID + ".json";
+        String fileName = SETTINGS_DIRECTORY + chatID + ".json";
         File file = new File(fileName);
         if (!file.exists()) {
             return null;
@@ -57,7 +57,8 @@ public class Reader {
         }
         return chatIDs;
     }
-    public static Map<String, Object> readInit() {
+
+    public static Map<String, String> readInit() {
         File directory = new File(SETTINGS_DIRECTORY);
         if (!directory.exists()) {
             boolean success = directory.mkdirs();

@@ -22,7 +22,6 @@ public class ChatsSettings {
         return instance;
     }
 
-
     public void loadSettingsFromFiles() {
         Reader reader = new Reader();
         List<Long> chatIDs = reader.getAllChatID();

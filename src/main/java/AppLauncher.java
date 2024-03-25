@@ -7,7 +7,7 @@ import java.util.concurrent.ScheduledExecutorService;
 public class AppLauncher {
     public static void main(String[] args) {
         ChatsSettings.getInstance().loadSettingsFromFiles();
-        TelegramBotService botService = new TelegramBotService();
+        new TelegramBotService();
         new ScheduledMessageSender().startScheduling();
     }
 }

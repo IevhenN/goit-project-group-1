@@ -15,14 +15,15 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import settings.Constants;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class InlineKeyboard {
-    private InlineKeyboard() {}
+    private InlineKeyboard() {
+    }
+
     public static InlineKeyboardMarkup getCurrencyKeyboard(long chatID) {
         ChatSettings chatSettings = ChatsSettings.getInstance().getChatSettings(chatID);
 
@@ -32,12 +33,12 @@ public class InlineKeyboard {
                 .filter((i) -> i != Constants.NACIONAL_CURRENCY)
                 .map((Currency i) -> {
                     String checkbox = "";
-                    if (chatSettings.getCurrencies().contains(i)){
-                        checkbox=Constants.CHECKBOX+" ";
+                    if (chatSettings.getCurrencies().contains(i)) {
+                        checkbox = Constants.CHECKBOX + " ";
                     }
                     InlineKeyboardButton button = InlineKeyboardButton
                             .builder()
-                            .text(checkbox+i.name())
+                            .text(checkbox + i.name())
                             .callbackData("currency" + i.name())
                             .build();
 
@@ -47,12 +48,13 @@ public class InlineKeyboard {
 
         return InlineKeyboardMarkup.builder().keyboard(currencysKeyboard).build();
     }
-    public static void sendCurrencyMessage(Update update){
+
+    public static void sendCurrencyMessage(Update update) {
         long chatId = update.getCallbackQuery().getMessage().getChatId();
         long messageId = update.getCallbackQuery().getMessage().getMessageId();
         String callbackQuery = update.getCallbackQuery().getData();
 
-        if (callbackQuery.equals("currency")){
+        if (callbackQuery.equals("currency")) {
             // new menu
             SendMessage message = new SendMessage();
             message.setText("Виберіть валюту");
@@ -65,15 +67,15 @@ public class InlineKeyboard {
             }
         } else {
             // The user clicked the button
-            String nameEnum = callbackQuery.replace("currency","");
+            String nameEnum = callbackQuery.replace("currency", "");
             Currency currency = Currency.valueOf(nameEnum);
             ChatSettings chatSettings = ChatsSettings.getInstance().getChatSettings(chatId);
             chatSettings.setCurrencies(currency);
 
             EditMessageReplyMarkup editMarkup = new EditMessageReplyMarkup();
-                editMarkup.setChatId(chatId);
-                editMarkup.setMessageId(Math.toIntExact(messageId));
-                editMarkup.setReplyMarkup(InlineKeyboard.getCurrencyKeyboard(chatId));
+            editMarkup.setChatId(chatId);
+            editMarkup.setMessageId(Math.toIntExact(messageId));
+            editMarkup.setReplyMarkup(InlineKeyboard.getCurrencyKeyboard(chatId));
             try {
                 CurrencyTelegramBot.getInstance().execute(editMarkup);
             } catch (TelegramApiException e) {
@@ -81,20 +83,21 @@ public class InlineKeyboard {
             }
         }
     }
+
     public static InlineKeyboardMarkup getBankKeyboard(long chatID) {
         ChatSettings chatSettings = ChatsSettings.getInstance().getChatSettings(chatID);
 
-        Stream<Bank>bankStream = Stream.of(Bank.values());
+        Stream<Bank> bankStream = Stream.of(Bank.values());
 
         List<List<InlineKeyboardButton>> bankKeyboard = bankStream
-                    .map((Bank i) -> {
+                .map((Bank i) -> {
                     String checkbox = "";
-                    if (chatSettings.getBank()==i){
-                        checkbox=Constants.CHECKBOX+" ";
+                    if (chatSettings.getBank() == i) {
+                        checkbox = Constants.CHECKBOX + " ";
                     }
                     InlineKeyboardButton button = InlineKeyboardButton
                             .builder()
-                            .text(checkbox+i.getName())
+                            .text(checkbox + i.getName())
                             .callbackData("bank" + i.name())
                             .build();
 
@@ -104,12 +107,13 @@ public class InlineKeyboard {
 
         return InlineKeyboardMarkup.builder().keyboard(bankKeyboard).build();
     }
-    public static void sendBankMessage(Update update){
+
+    public static void sendBankMessage(Update update) {
         long chatId = update.getCallbackQuery().getMessage().getChatId();
         long messageId = update.getCallbackQuery().getMessage().getMessageId();
         String callbackQuery = update.getCallbackQuery().getData();
 
-        if (callbackQuery.equals("bank")){
+        if (callbackQuery.equals("bank")) {
             // new menu
             SendMessage message = new SendMessage();
             message.setText("Виберіть банк");
@@ -122,7 +126,7 @@ public class InlineKeyboard {
             }
         } else {
             // The user clicked the button
-            String nameEnum = callbackQuery.replace("bank","");
+            String nameEnum = callbackQuery.replace("bank", "");
             Bank bank = Bank.valueOf(nameEnum);
             ChatSettings chatSettings = ChatsSettings.getInstance().getChatSettings(chatId);
             chatSettings.setBank(bank);
@@ -138,20 +142,21 @@ public class InlineKeyboard {
             }
         }
     }
+
     public static InlineKeyboardMarkup getQuantityDigitsKeyboard(long chatID) {
         ChatSettings chatSettings = ChatsSettings.getInstance().getChatSettings(chatID);
 
-        Stream<QuantityDigits>quantityDigitsStream = Stream.of(QuantityDigits.values());
+        Stream<QuantityDigits> quantityDigitsStream = Stream.of(QuantityDigits.values());
 
         List<List<InlineKeyboardButton>> quantityDigitsKeyboard = quantityDigitsStream
                 .map((QuantityDigits i) -> {
                     String checkbox = "";
-                    if (chatSettings.getQuantityDigits()==i){
-                        checkbox=Constants.CHECKBOX+" ";
+                    if (chatSettings.getQuantityDigits() == i) {
+                        checkbox = Constants.CHECKBOX + " ";
                     }
                     InlineKeyboardButton button = InlineKeyboardButton
                             .builder()
-                            .text(checkbox+i.getName())
+                            .text(checkbox + i.getName())
                             .callbackData("quantitydigits" + i.name())
                             .build();
 
@@ -161,12 +166,13 @@ public class InlineKeyboard {
 
         return InlineKeyboardMarkup.builder().keyboard(quantityDigitsKeyboard).build();
     }
-    public static void sendQuantityDigitsMessage(Update update){
+
+    public static void sendQuantityDigitsMessage(Update update) {
         long chatId = update.getCallbackQuery().getMessage().getChatId();
         long messageId = update.getCallbackQuery().getMessage().getMessageId();
         String callbackQuery = update.getCallbackQuery().getData();
 
-        if (callbackQuery.equals("quantitydigits")){
+        if (callbackQuery.equals("quantitydigits")) {
             // new menu
             SendMessage message = new SendMessage();
             message.setText("Виберіть кількість знаків після коми");
@@ -179,7 +185,7 @@ public class InlineKeyboard {
             }
         } else {
             // The user clicked the button
-            String nameEnum = callbackQuery.replace("quantitydigits","");
+            String nameEnum = callbackQuery.replace("quantitydigits", "");
             QuantityDigits quantityDigits = QuantityDigits.valueOf(nameEnum);
             ChatSettings chatSettings = ChatsSettings.getInstance().getChatSettings(chatId);
             chatSettings.setQuantityDigits(quantityDigits);
@@ -195,20 +201,21 @@ public class InlineKeyboard {
             }
         }
     }
+
     public static InlineKeyboardMarkup getTimeAlertsKeyboard(long chatID) {
         ChatSettings chatSettings = ChatsSettings.getInstance().getChatSettings(chatID);
 
-        Stream<TimeAlerts>timeAlertsStream = Stream.of(TimeAlerts.values());
+        Stream<TimeAlerts> timeAlertsStream = Stream.of(TimeAlerts.values());
 
         List<InlineKeyboardButton> timeAlertsKeyboard = timeAlertsStream
                 .map((TimeAlerts i) -> {
                     String checkbox = "";
-                    if (chatSettings.getTimeAlerts()==i){
-                        checkbox=Constants.CHECKBOX+" ";
+                    if (chatSettings.getTimeAlerts() == i) {
+                        checkbox = Constants.CHECKBOX + " ";
                     }
                     return InlineKeyboardButton
                             .builder()
-                            .text(checkbox+i.getName())
+                            .text(checkbox + i.getName())
                             .callbackData("timealerts" + i.name())
                             .build();
                 })
@@ -237,12 +244,12 @@ public class InlineKeyboard {
         return listOfLists;
     }
 
-    public static void sendTimeAlertsMessage(Update update){
+    public static void sendTimeAlertsMessage(Update update) {
         long chatId = update.getCallbackQuery().getMessage().getChatId();
         long messageId = update.getCallbackQuery().getMessage().getMessageId();
         String callbackQuery = update.getCallbackQuery().getData();
 
-        if (callbackQuery.equals("timealerts")){
+        if (callbackQuery.equals("timealerts")) {
             // new menu
             SendMessage message = new SendMessage();
             message.setText("Виберіть час сповіщення");
@@ -255,7 +262,7 @@ public class InlineKeyboard {
             }
         } else {
             // The user clicked the button
-            String nameEnum = callbackQuery.replace("timealerts","");
+            String nameEnum = callbackQuery.replace("timealerts", "");
             TimeAlerts timeAlerts = TimeAlerts.valueOf(nameEnum);
             ChatSettings chatSettings = ChatsSettings.getInstance().getChatSettings(chatId);
             chatSettings.setTimeAlerts(timeAlerts);
@@ -271,6 +278,7 @@ public class InlineKeyboard {
             }
         }
     }
+
     public static InlineKeyboardMarkup getSettingsKeyboard() {
         InlineKeyboardButton commasButton = InlineKeyboardButton
                 .builder()
@@ -299,7 +307,8 @@ public class InlineKeyboard {
         settingsKeyboard.add(Collections.singletonList(timeButton));
         return InlineKeyboardMarkup.builder().keyboard(settingsKeyboard).build();
     }
-    public static void sendSettingsMessage(Update update){
+
+    public static void sendSettingsMessage(Update update) {
         long chatId = update.getCallbackQuery().getMessage().getChatId();
         SendMessage message = new SendMessage();
         message.setText("Налаштування");
@@ -312,7 +321,7 @@ public class InlineKeyboard {
         }
     }
 
-    public static void sendInformation(long chatId){
+    public static void sendInformation(long chatId) {
         SendMessage message = new SendMessage();
         String info = CurrencyTelegramBot.getInfo(chatId);
         message.setText(info);
