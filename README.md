@@ -1,4 +1,4 @@
-In the local repository, in the Data folder, create an init.json file with the following structure:
+Create a Data folder in the project root, add the init.json file and fill it with the following data:
 
 {
   "bot-name": "XXX",
