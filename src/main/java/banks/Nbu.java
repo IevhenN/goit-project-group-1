@@ -22,23 +22,24 @@ import java.util.Scanner;
         private Nbu() {
 
         }
+
         CurrencyTelegramBot bot = CurrencyTelegramBot.getInstance();
         Map<String, Object> initFile = bot.getInitFile();
 
         private static Nbu instance = null;
 
 
-         public static synchronized Nbu getInstance(){
-             if (instance == null){
-                 instance = new Nbu();
-             }
-             return instance;
-         }
+        public static synchronized Nbu getInstance() {
+            if (instance == null) {
+                instance = new Nbu();
+            }
+            return instance;
+        }
 
 
         @Override
-        public CurrencyRate getCurrencyRateAPI(Currency currency) throws IOException {
-
+        public CurrencyRate getCurrencyRateAPI(Currency currency) {
+            try {
                 URL url = new URL((String) initFile.get("NBU_API_URL"));
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
@@ -56,16 +57,20 @@ import java.util.Scanner;
 
 
                 CurrencyRate currencyRate = null;
-                for (JsonElement element : jsonArray){
+                for (JsonElement element : jsonArray) {
                     JsonObject jsonObject = element.getAsJsonObject();
                     String code = jsonObject.get("cc").getAsString();
-                    if (code.equals(currency.name())){
+                    if (code.equals(currency.name())) {
                         double rate = jsonObject.get("rate").getAsDouble();
                         currencyRate = new CurrencyRate(currency, rate, rate);
                         break;
                     }
                 }
-            return currencyRate;
+                return currencyRate;
+            } catch (IOException e) {
+                System.err.println("Error occurred while connecting to NBU API: " + e.getMessage());
+                return new CurrencyRate(currency, 0, 0);
+            }
         }
     }
 

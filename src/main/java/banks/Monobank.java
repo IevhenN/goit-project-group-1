@@ -38,8 +38,8 @@ public class Monobank implements CurrencyTrading {
                     .body()
                     .text();
         } catch (IOException e) {
-            e.printStackTrace();
-            throw new IllegalStateException("Can't connect to MONO API");
+            System.err.println("Error occurred while connecting to MONO API: " + e.getMessage());
+            return new CurrencyRate(currency, 0, 0);
         }
 
         Type typeToken = new TypeToken<List<Map<String, String>>>() {
