@@ -1,15 +1,10 @@
 package telegram;
-
-import banks.Bank;
-import banks.Monobank;
 import chat.ChatSettings;
 import chat.ChatsSettings;
-import currency.Currency;
 import currency.CurrencyRate;
 
-import exchange.julia.telegram.currency.CurrencyService;
-import exchange.julia.telegram.ui.PrintCurrencyService;
 
+import lombok.Getter;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import reader.Reader;
@@ -19,13 +14,15 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Getter
 public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
     private static CurrencyTelegramBot instance = null;
-    Map<String, Object> initFile = Reader.readInit();
-
+    private final Map<String, Object> initFile = Reader.readInit();
 
     private CurrencyTelegramBot(){
+
         register(new StartCommand());
+
     }
 
     public static synchronized CurrencyTelegramBot getInstance() {
@@ -41,6 +38,7 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
     }
     @Override
     public String getBotToken() {
+
         return (String) initFile.get("bot-token");
     }
     @Override
@@ -69,7 +67,13 @@ public class CurrencyTelegramBot extends TelegramLongPollingCommandBot {
 
     private static List<CurrencyRate> getCurrencyInfo(ChatSettings chatSettings){
         return chatSettings.getCurrencies().stream()
-                .map(i->chatSettings.getBank().getBank().getCurrencyRateAPI(i))
+                .map(i-> {
+                    try {
+                        return chatSettings.getBank().getBank().getCurrencyRateAPI(i);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
                 .collect(Collectors.toList());
     }
 

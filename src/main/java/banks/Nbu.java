@@ -6,13 +6,12 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import currency.Currency;
 import currency.CurrencyRate;
+import telegram.CurrencyTelegramBot;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.ProtocolException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 
@@ -23,10 +22,11 @@ import java.util.Scanner;
         private Nbu() {
 
         }
+        CurrencyTelegramBot bot = CurrencyTelegramBot.getInstance();
+        Map<String, Object> initFile = bot.getInitFile();
 
         private static Nbu instance = null;
 
-        private static final String NBU_API = "https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json";
 
          public static synchronized Nbu getInstance(){
              if (instance == null){
@@ -39,7 +39,7 @@ import java.util.Scanner;
         @Override
         public CurrencyRate getCurrencyRateAPI(Currency currency) throws IOException {
 
-                URL url = new URL(NBU_API);
+                URL url = new URL((String) initFile.get("NBU_API_URL"));
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
 
@@ -59,17 +59,12 @@ import java.util.Scanner;
                 for (JsonElement element : jsonArray){
                     JsonObject jsonObject = element.getAsJsonObject();
                     String code = jsonObject.get("cc").getAsString();
-                    if (code.equals(currency.getCode())){
+                    if (code.equals(currency.name())){
                         double rate = jsonObject.get("rate").getAsDouble();
                         currencyRate = new CurrencyRate(currency, rate, rate);
                         break;
                     }
                 }
-
-
-
-
-
             return currencyRate;
         }
     }
